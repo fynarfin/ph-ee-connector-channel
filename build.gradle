@@ -51,7 +51,7 @@ ext {
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'org.mifos:ph-ee-connector-common:1.4.1-SNAPSHOT'
+    implementation 'org.mifos:ph-ee-connector-common:1.9.1-SNAPSHOT'
     implementation 'org.apache.camel.springboot:camel-spring-boot-starter:3.12.0'
     implementation "org.springframework.boot:spring-boot-starter:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
@@ -75,7 +75,7 @@ dependencies {
     implementation 'javax.servlet:javax.servlet-api:3.1.0'
     implementation 'commons-codec:commons-codec:1.15'
     implementation 'commons-io:commons-io:2.11.0'
-    implementation ("org.apache.camel:camel-spring-redis:3.12.0")
+    implementation("org.apache.camel:camel-spring-redis:3.12.0")
     implementation "org.springframework.boot:spring-boot-starter-data-redis:2.6.2"
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
     implementation 'io.springfox:springfox-oas:3.0.0'

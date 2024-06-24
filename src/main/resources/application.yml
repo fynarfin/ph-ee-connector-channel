@@ -1,12 +1,12 @@
 camel:
-  server-port: 5000
+  server-port: 5009
   springboot:
     main-run-controller: true
   dataformat:
     json-jackson:
       auto-discover-object-mapper: true
 
-dfspids: "DFSPID"
+dfspids: "gorilla"
 
 transaction-id-length: -1
 
@@ -20,13 +20,13 @@ mpesa:
 timer: "PT45S"
 
 server:
-  ssl:
-    key-alias: "tomcat-https"
-    key-store: "classpath:keystore.jks"
-    key-store-type: JKS
-    key-password: "<replace-with-password>"
-    key-store-password: "<replace-with-password>"
-  port: 8443
+  #  ssl:
+  #    key-alias: "tomcat-https"
+  #    key-store: "classpath:keystore.jks"
+  #    key-store-type: JKS
+  #    key-password: "<replace-with-password>"
+  #    key-store-password: "<replace-with-password>"
+  port: 8880
 
 operations:
   url: "http://bb-operations.mifos.io/api/v1"
@@ -39,7 +39,7 @@ bpmn:
   flows:
     payment-transfer: "PayerFundTransfer-{dfspid}"
     special-payment-transfer: "SpecialPayerFundTransfer-{dfspid}"
-    transaction-request: "payee-transaction-request-{dfspid}"
+    transaction-request: "payee_transaction_request-{dfspid}"
     party-registration: "party-registration-{dfspid}"
     gsma-base-transaction: "gsma_base_transaction-{dfspid}"
     gsma-int-transfer: "gsma_int_transfer"
@@ -63,9 +63,9 @@ zeebe:
   client:
     max-execution-threads: 1000
     evenly-allocated-max-jobs: 1000
-#    max-execution-threads: 100
-#    number-of-workers: 5
-#    evenly-allocated-max-jobs: "#{${zeebe.client.max-execution-threads} / ${zeebe.client.number-of-workers}}"
+  #    max-execution-threads: 100
+  #    number-of-workers: 5
+  #    evenly-allocated-max-jobs: "#{${zeebe.client.max-execution-threads} / ${zeebe.client.number-of-workers}}"
   broker:
     contactpoint: "localhost:26500"
 
@@ -76,8 +76,8 @@ rest:
     header: "Basic Y2xpZW50Og=="
 
 management:
-#  server:
-#    port: 8443
+  #  server:
+  #    port: 8443
   endpoint:
     health:
       probes:
@@ -97,7 +97,7 @@ springdoc:
   writer-with-order-by-keys: true
 
 destination:
-    dfspid: "jupiter"
+  dfspid: "jupiter"
 
 redis:
   host: "127.0.0.1"
@@ -106,6 +106,20 @@ redis:
   database: 1
   cacheRetencyDuration: 30 # in days
   idempotency:
-    enabled: true
+    enabled: false
     keyFormat: "clientCorrelationId_tenant_api"
     apiList: "/channel/transfer,/channel/collection,/channel/gsma/transaction,/channel/transactionRequest"
+
+bpmns:
+  tenants:
+    - id: "lion"
+      flows:
+        payment-transfer: "minimal_mock_fund_transfer-{dfspid}"
+    - id: "gorilla"
+      flows:
+        payment-transfer: "PayerFundTransfer-{dfspid}"
+        outbound-transfer-request: "{ps}_flow_{ams}-{dfspid}"
+    - id: "rhino"
+      flows:
+        payment-transfer: "minimal_mock_fund_transfer_account_lookup-{dfspid}"
+        outbound-transfer-request: "minimal_mock_transfer_request-{dfspid}"

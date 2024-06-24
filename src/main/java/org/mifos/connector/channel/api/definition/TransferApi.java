@@ -13,15 +13,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.http.ResponseEntity;
+
+import java.util.concurrent.ExecutionException;
 
 public interface TransferApi {
 
     @PostMapping("/channel/transfer")
-    GsmaP2PResponseDto transfer(@RequestHeader(value = "Platform-TenantId") String tenant,
+    //earlier response was GsmaP2PResponseDto
+    ResponseEntity<?> transfer(@RequestHeader(value = "Platform-TenantId") String tenant,
             @RequestHeader(value = BATCH_ID_HEADER, required = false) String batchId,
             @RequestHeader(value = CLIENTCORRELATIONID, required = false) String correlationId,
             @RequestHeader(value = REGISTERING_INSTITUTION_ID, required = false) String registeringInstitutionId,
-            @RequestBody TransactionChannelRequestDTO requestBody) throws JsonProcessingException;
+            @RequestBody TransactionChannelRequestDTO requestBody)
+            throws ExecutionException, InterruptedException,JsonProcessingException;
 
     @GetMapping("/channel/transfer/{transactionId}")
     TransactionStatusResponseDTO transferId(@PathVariable String transactionId, @RequestHeader(value = "Platform-TenantId") String tenant)
