@@ -26,6 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+
 @RestController
 public class TransferApiController implements TransferApi {
 
@@ -41,6 +43,22 @@ public class TransferApiController implements TransferApi {
     @ValidateHeaders(requiredHeaders = { HeaderConstants.Platform_TenantId}, validatorClass = HeaderValidator.class, validationFunction = "validateTransfer")
     public ResponseEntity<?> transfer(String tenant, String batchId, String correlationId, String registeringInstitutionId,
                                           TransactionChannelRequestDTO requestBody) throws JsonProcessingException {
+
+        if (tenant == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id cannot be null"));
+        }
+
+        if (tenant.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id cannot be empty"));
+        }
+
+        if (tenant.length() > 20) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id length cannot be greater than 20 letters"));
+        }
+
+        if(!tenant.equals("gorilla")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "enter a valid platform tenant id"));
+        }
 
         Headers headers = new Headers.HeaderBuilder().addHeader("Platform-TenantId", tenant).addHeader(BATCH_ID, batchId)
                 .addHeader(CLIENTCORRELATIONID, correlationId).addHeader(REGISTERING_INSTITUTION_ID, registeringInstitutionId).build();
