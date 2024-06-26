@@ -12,11 +12,13 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ProducerTemplate;
 import org.mifos.connector.channel.api.definition.TransferApi;
 import org.mifos.connector.channel.gsma_api.GsmaP2PResponseDto;
+import org.mifos.connector.channel.model.TransferErrorDTO;
 import org.mifos.connector.channel.service.ValidateHeaders;
 import org.mifos.connector.channel.utils.HeaderConstants;
 import org.mifos.connector.channel.utils.Headers;
 import org.mifos.connector.channel.utils.SpringWrapperUtil;
 import org.mifos.connector.channel.validator.HeaderValidator;
+import org.mifos.connector.channel.validator.ChannelValidator;
 import org.mifos.connector.common.channel.dto.TransactionChannelRequestDTO;
 import org.mifos.connector.common.channel.dto.TransactionStatusResponseDTO;
 import org.slf4j.Logger;
@@ -44,22 +46,24 @@ public class TransferApiController implements TransferApi {
     public ResponseEntity<?> transfer(String tenant, String batchId, String correlationId, String registeringInstitutionId,
                                           TransactionChannelRequestDTO requestBody) throws JsonProcessingException {
 
-        if (tenant == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id cannot be null"));
-        }
+//        if (tenant.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id cannot be empty"));
+//        }
+//
+//        if (tenant.length() > 20) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id length cannot be greater than 20 letters"));
+//        }
 
-        if (tenant.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id cannot be empty"));
+        try{
+            TransferErrorDTO transferErrorDTO= ChannelValidator.validateTransfer(requestBody);
+            if(transferErrorDTO!=null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(transferErrorDTO);
+            }
+        }catch (NullPointerException e) {
+            throw e;
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "An internal server error occurred. Please try again later."));
         }
-
-        if (tenant.length() > 20) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id length cannot be greater than 20 letters"));
-        }
-
-        if(!tenant.equals("gorilla")){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "enter a valid platform tenant id"));
-        }
-
         Headers headers = new Headers.HeaderBuilder().addHeader("Platform-TenantId", tenant).addHeader(BATCH_ID, batchId)
                 .addHeader(CLIENTCORRELATIONID, correlationId).addHeader(REGISTERING_INSTITUTION_ID, registeringInstitutionId).build();
         Exchange exchange = SpringWrapperUtil.getDefaultWrappedExchange(producerTemplate.getCamelContext(), headers,

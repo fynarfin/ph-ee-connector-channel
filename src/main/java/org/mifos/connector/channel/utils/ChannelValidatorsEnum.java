@@ -1,9 +1,9 @@
 package org.mifos.connector.channel.utils;
 
 import org.mifos.connector.common.exception.PaymentHubErrorCategory;
-//import org.mifos.connector.common.validation.ValidationCodeType;
+import org.mifos.connector.common.validation.ValidationCodeType;
 
-public enum ChannelValidatorsEnum{
+public enum ChannelValidatorsEnum implements ValidationCodeType{
 
     INVALID_PLATFORM_TENANT_ID_LENGTH(
             "error.msg.schema.platform.tenant.id.length.is.invalid",

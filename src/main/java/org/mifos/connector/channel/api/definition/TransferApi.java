@@ -26,7 +26,7 @@ public interface TransferApi {
             @RequestHeader(value = CLIENTCORRELATIONID, required = false) String correlationId,
             @RequestHeader(value = REGISTERING_INSTITUTION_ID, required = false) String registeringInstitutionId,
             @RequestBody TransactionChannelRequestDTO requestBody)
-            throws ExecutionException, InterruptedException,JsonProcessingException;
+            throws JsonProcessingException;
 
     @GetMapping("/channel/transfer/{transactionId}")
     TransactionStatusResponseDTO transferId(@PathVariable String transactionId, @RequestHeader(value = "Platform-TenantId") String tenant)

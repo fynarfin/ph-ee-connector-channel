@@ -35,6 +35,12 @@ operations:
     transfers: "/transfers?page=0&size=1&"
     transactionReq: "/transactionRequests/?"
 
+security:
+  jws:
+    enable: false
+    response:
+      enable: false
+
 bpmn:
   flows:
     payment-transfer: "PayerFundTransfer-{dfspid}"
