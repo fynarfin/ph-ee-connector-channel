@@ -19,6 +19,7 @@ import org.mifos.connector.channel.utils.Headers;
 import org.mifos.connector.channel.utils.SpringWrapperUtil;
 import org.mifos.connector.channel.validator.HeaderValidator;
 import org.mifos.connector.channel.validator.ChannelValidator;
+import org.mifos.connector.common.channel.dto.PhErrorDTO;
 import org.mifos.connector.common.channel.dto.TransactionChannelRequestDTO;
 import org.mifos.connector.common.channel.dto.TransactionStatusResponseDTO;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class TransferApiController implements TransferApi {
@@ -46,23 +48,15 @@ public class TransferApiController implements TransferApi {
     public ResponseEntity<?> transfer(String tenant, String batchId, String correlationId, String registeringInstitutionId,
                                           TransactionChannelRequestDTO requestBody) throws JsonProcessingException {
 
-//        if (tenant.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id cannot be empty"));
-//        }
-//
-//        if (tenant.length() > 20) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", "platform tenant id length cannot be greater than 20 letters"));
-//        }
-
         try{
-            TransferErrorDTO transferErrorDTO= ChannelValidator.validateTransfer(requestBody);
-            if(transferErrorDTO!=null){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(transferErrorDTO);
+            PhErrorDTO phErrorDTO = ChannelValidator.validateTransfer(requestBody);
+            if (phErrorDTO != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(phErrorDTO);
             }
         }catch (NullPointerException e) {
             throw e;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "An internal server error occurred. Please try again later."));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("Error message", "Internal Server Error"));
         }
         Headers headers = new Headers.HeaderBuilder().addHeader("Platform-TenantId", tenant).addHeader(BATCH_ID, batchId)
                 .addHeader(CLIENTCORRELATIONID, correlationId).addHeader(REGISTERING_INSTITUTION_ID, registeringInstitutionId).build();

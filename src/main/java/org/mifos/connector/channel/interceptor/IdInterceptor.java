@@ -30,7 +30,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
-@Primary
 public class IdInterceptor implements HandlerInterceptor {
 
     @Autowired

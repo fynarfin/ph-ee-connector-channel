@@ -20,7 +20,6 @@ import java.util.concurrent.ExecutionException;
 public interface TransferApi {
 
     @PostMapping("/channel/transfer")
-    //earlier response was GsmaP2PResponseDto
     ResponseEntity<?> transfer(@RequestHeader(value = "Platform-TenantId") String tenant,
             @RequestHeader(value = BATCH_ID_HEADER, required = false) String batchId,
             @RequestHeader(value = CLIENTCORRELATIONID, required = false) String correlationId,

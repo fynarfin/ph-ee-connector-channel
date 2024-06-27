@@ -1,29 +1,34 @@
 package org.mifos.connector.channel.validator;
 
+import static org.mifos.connector.common.exception.PaymentHubError.ExtValidationError;
 
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
-
 import org.mifos.connector.channel.utils.ChannelValidatorsEnum;
 import org.mifos.connector.channel.utils.HeaderConstants;
 import org.mifos.connector.common.channel.dto.PhErrorDTO;
 import org.mifos.connector.common.exception.PaymentHubErrorCategory;
 import org.mifos.connector.common.validation.ValidatorBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import static org.mifos.connector.common.exception.PaymentHubError.ExtValidationError;
-
+@Component
 public class HeaderValidator {
 
     @Autowired
     private UnsupportedParameterValidation unsupportedParameterValidator;
-    private static final String resource = "transferValidator";
+
+    @Value("#{'${default_headers}'.split(',')}")
+    private List<String> defaultHeader;
+
+    private static final String resource = "channelValidator";
 
     public PhErrorDTO validateTransfer(Set<String> requiredHeaders, HttpServletRequest request) {
-        final ValidatorBuilder validatorBuilder = new org.mifos.connector.common.validation.ValidatorBuilder();
+        final ValidatorBuilder validatorBuilder = new ValidatorBuilder();
 
         List<String> headers = getHeaderList(request);
 
