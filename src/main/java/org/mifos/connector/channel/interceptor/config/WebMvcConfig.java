@@ -20,7 +20,8 @@ public class WebMvcConfig extends WebMvcConfigurationSupport implements WebMvc {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(idInterceptor);
-        registry.addInterceptor(validatorInterceptor).addPathPatterns("/channel/transfer");
+        registry.addInterceptor(validatorInterceptor).addPathPatterns("/channel/transfer").addPathPatterns("/channel/transactionRequest")
+                .addPathPatterns("/channel/gsma/transaction");
         super.addInterceptors(registry);
     }
 }

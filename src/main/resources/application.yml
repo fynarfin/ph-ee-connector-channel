@@ -1,5 +1,5 @@
 camel:
-  server-port: 5009
+  server-port: 5010
   springboot:
     main-run-controller: true
   dataformat:
@@ -26,7 +26,7 @@ server:
   #    key-store-type: JKS
   #    key-password: "<replace-with-password>"
   #    key-store-password: "<replace-with-password>"
-  port: 8880
+  port: 7070
 
 operations:
   url: "http://bb-operations.mifos.io/api/v1"

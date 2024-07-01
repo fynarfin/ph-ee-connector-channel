@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.mifos.connector.channel.service.ValidateHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -55,7 +54,7 @@ public class ValidatorInterceptor implements HandlerInterceptor {
     }
 
     private Object invokeValidationMethod(ValidateHeaders validateHeaders, Object validatorInstance, Set<String> headersSet,
-                                          HttpServletRequest request) throws Exception {
+            HttpServletRequest request) throws Exception {
         Method validationMethod = validatorInstance.getClass().getDeclaredMethod(validateHeaders.validationFunction(), Set.class,
                 HttpServletRequest.class);
         Object[] parameters = { headersSet, request };

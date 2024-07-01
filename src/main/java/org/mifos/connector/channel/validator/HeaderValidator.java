@@ -36,8 +36,53 @@ public class HeaderValidator {
 
         // Checks for Platform_TenantId
         validatorBuilder.validateFieldIsNullAndMaxLengthWithFailureCode(resource, HeaderConstants.Platform_TenantId,
-                request.getHeader(HeaderConstants.Platform_TenantId), ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID,
-                20, ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID_LENGTH);
+                request.getHeader(HeaderConstants.Platform_TenantId), ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID, 20,
+                ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID_LENGTH);
+
+        return handleValidationErrors(validatorBuilder);
+    }
+
+    public PhErrorDTO validateTransactionRequest(Set<String> requiredHeaders, HttpServletRequest request) {
+        final ValidatorBuilder validatorBuilder = new ValidatorBuilder();
+
+        List<String> headers = getHeaderList(request);
+
+        unsupportedParameterValidator.handleRequiredParameterValidation(headers, requiredHeaders, validatorBuilder);
+
+        // Checks for Platform_TenantId
+        validatorBuilder.validateFieldIsNullAndMaxLengthWithFailureCode(resource, HeaderConstants.Platform_TenantId,
+                request.getHeader(HeaderConstants.Platform_TenantId), ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID, 20,
+                ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID_LENGTH);
+
+        return handleValidationErrors(validatorBuilder);
+    }
+
+    public PhErrorDTO validateGsmaTransaction(Set<String> requiredHeaders, HttpServletRequest request) {
+        final ValidatorBuilder validatorBuilder = new ValidatorBuilder();
+
+        List<String> headers = getHeaderList(request);
+
+        unsupportedParameterValidator.handleRequiredParameterValidation(headers, requiredHeaders, validatorBuilder);
+
+        // checks for ams name
+        validatorBuilder.validateFieldIsNullAndMaxLengthWithFailureCode(resource, HeaderConstants.amsName,
+                request.getHeader(HeaderConstants.amsName), ChannelValidatorsEnum.INVALID_AMS_NAME, 20,
+                ChannelValidatorsEnum.INVALID_AMS_NAME_LENGTH);
+
+        // checks for account holding institution id
+        validatorBuilder.validateFieldIsNullAndMaxLengthWithFailureCode(resource, HeaderConstants.accountHoldingInstitutionId,
+                request.getHeader(HeaderConstants.accountHoldingInstitutionId),
+                ChannelValidatorsEnum.INVALID_ACCOUNT_HOLDING_INSTITUTION_ID, 20,
+                ChannelValidatorsEnum.INVALID_ACCOUNT_HOLDING_INSTITUTION_ID_LENGTH);
+
+        // checks for x callback url
+        validatorBuilder.validateFieldIsNullAndMaxLengthWithFailureCode(resource, HeaderConstants.X_CallbackURL,
+                request.getHeader(HeaderConstants.X_CallbackURL), ChannelValidatorsEnum.INVALID_X_CALLBACK_URL, 1000,
+                ChannelValidatorsEnum.INVALID_X_CALLBACK_URL_LENGTH);
+
+        // checks for x correlation id
+        validatorBuilder.validateFieldIgnoreNullAndMaxLengthWithFailureCode(resource, HeaderConstants.CLIENTCORRELATIONID,
+                request.getHeader(HeaderConstants.CLIENTCORRELATIONID), 100, ChannelValidatorsEnum.INVALID_CLIENT_CORRELATION_ID_LENGTH);
 
         return handleValidationErrors(validatorBuilder);
     }
