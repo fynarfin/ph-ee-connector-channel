@@ -25,4 +25,16 @@ public class GlobalExceptionMapper {
         GlobalExceptionMapperDTO exceptionMapperDTO = new GlobalExceptionMapperDTO(INTERNAL_SERVER_OCCURRED.getValue(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionMapperDTO);
     }
+
+    // @ExceptionHandler(MissingRequestHeaderException.class)
+    // public ResponseEntity<Map<String, String>> handleMissingRequestHeaderException(MissingRequestHeaderException ex)
+    // {
+    // if (ex.getHeaderName().equals("Platform-TenantId")) {
+    // String message = "Required request header 'Platform-TenantId' for method parameter type String is not present";
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    // .body(Collections.singletonMap("message", message));
+    // }
+    // return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+    // .body(Collections.singletonMap("message", ex.getMessage()));
+    // }
 }

@@ -1,0 +1,1696 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Channel connector APIs"
+  },
+  "servers": [
+    {
+      "description": "Generated server url",
+      "url": "http://localhost:7777"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "index",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "index-api-controller"
+        ]
+      }
+    },
+    "/accounts/validate/{primaryIdentifierName}/{primaryIdentifierVal}": {
+      "post": {
+        "operationId": "validation",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "amsUrl",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "amsName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "accountHoldingInstitutionId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Content-Type",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "primaryIdentifierName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "primaryIdentifierVal",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidationRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponseDTO"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "validation-api-controller"
+        ]
+      }
+    },
+    "/channel/collection": {
+      "post": {
+        "operationId": "collection",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CorrelationID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Payment-Scheme",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GsmaP2PResponseDto"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "collection-api-controller"
+        ]
+      }
+    },
+    "/channel/gsma/deposit": {
+      "post": {
+        "operationId": "gsmadeposit",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CorrelationID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GSMATransaction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestStateDTO"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "gsma-deposit-api-controller"
+        ]
+      }
+    },
+    "/channel/gsma/transaction": {
+      "post": {
+        "operationId": "gsmatransaction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-CorrelationID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "amsName",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "accountHoldingInstitutionId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CallbackURL",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GsmaTransfer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "transactionId": "c3ce2b92-85e1-42b1-a71f-08f2ee44d42b"
+                }
+              }
+            },
+            "description": "Accepted: Transaction id generated"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Invalid Headers": {
+                    "description": "Invalid Headers",
+                    "value": {
+                      "errorCategory": "Validation",
+                      "errorCode": "error.msg.header.validation.errors",
+                      "errorDescription": "The headers are invalid",
+                      "developerMessage": "The headers are invalid",
+                      "defaultUserMessage": "The headers are invalid",
+                      "errors": [
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.platform.tenant.id.cannot.be.null.or.empty",
+                          "errorDescription": "Platform Tenant Id cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.platform.tenant.id.length.is.invalid",
+                          "errorDescription": "Platform Tenant Id length is invalid",
+                          "errorParameters": [
+                            {
+                              "key": "Platform-TenantId",
+                              "value": "20"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Invalid Request Body": {
+                    "description": "Invalid Request Body",
+                    "value": {
+                      "errorCategory": "Validation",
+                      "errorCode": "error.msg.schema.validation.errors",
+                      "errorDescription": "The request is invalid",
+                      "developerMessage": "The request is invalid",
+                      "defaultUserMessage": "The request is invalid",
+                      "errors": [
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.payer.cannot.be.null.or.empty",
+                          "errorDescription": "Payer cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.payee.cannot.be.null.or.empty",
+                          "errorDescription": "Payee cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.amount.cannot.be.null.or.empty",
+                          "errorDescription": "Amount cannot be null or empty"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          }
+        },
+        "tags": [
+          "gsma-transaction-api-controller"
+        ]
+      }
+    },
+    "/channel/gsma/transfer": {
+      "post": {
+        "operationId": "gsmatransfer",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CorrelationID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-BatchID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GSMATransaction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "gsma-transfer-api-controller"
+        ]
+      }
+    },
+    "/channel/job/resolve": {
+      "post": {
+        "operationId": "job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "job-api-controller"
+        ]
+      }
+    },
+    "/channel/partyRegistration": {
+      "post": {
+        "operationId": "partyRegistration",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterAliasRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "party-registration-api-controller"
+        ]
+      }
+    },
+    "/channel/transaction/{transactionId}/resolve": {
+      "post": {
+        "operationId": "transactionResolve",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "transaction-api-controller"
+        ]
+      }
+    },
+    "/channel/transactionRequest": {
+      "post": {
+        "operationId": "transaction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CorrelationID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionChannelRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "transactionId": "c3ce2b92-85e1-42b1-a71f-08f2ee44d42b"
+                }
+              }
+            },
+            "description": "Accepted: Transaction id generated"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Invalid Headers": {
+                    "description": "Invalid Headers",
+                    "value": {
+                      "errorCategory": "Validation",
+                      "errorCode": "error.msg.header.validation.errors",
+                      "errorDescription": "The headers are invalid",
+                      "developerMessage": "The headers are invalid",
+                      "defaultUserMessage": "The headers are invalid",
+                      "errors": [
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.platform.tenant.id.cannot.be.null.or.empty",
+                          "errorDescription": "Platform Tenant Id cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.platform.tenant.id.length.is.invalid",
+                          "errorDescription": "Platform Tenant Id length is invalid",
+                          "errorParameters": [
+                            {
+                              "key": "Platform-TenantId",
+                              "value": "20"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Invalid Request Body": {
+                    "description": "Invalid Request Body",
+                    "value": {
+                      "errorCategory": "Validation",
+                      "errorCode": "error.msg.schema.validation.errors",
+                      "errorDescription": "The request is invalid",
+                      "developerMessage": "The request is invalid",
+                      "defaultUserMessage": "The request is invalid",
+                      "errors": [
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.payer.cannot.be.null.or.empty",
+                          "errorDescription": "Payer cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.payee.cannot.be.null.or.empty",
+                          "errorDescription": "Payee cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.amount.cannot.be.null.or.empty",
+                          "errorDescription": "Amount cannot be null or empty"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          }
+        },
+        "tags": [
+          "transaction-api-controller"
+        ]
+      }
+    },
+    "/channel/transfer": {
+      "post": {
+        "operationId": "transfer",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-BatchID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-CorrelationID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Registering-Institution-ID",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionChannelRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "example": {
+                  "transactionId": "c3ce2b92-85e1-42b1-a71f-08f2ee44d42b"
+                }
+              }
+            },
+            "description": "Accepted: Transaction id generated"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Invalid Headers": {
+                    "description": "Invalid Headers",
+                    "value": {
+                      "errorCategory": "Validation",
+                      "errorCode": "error.msg.header.validation.errors",
+                      "errorDescription": "The headers are invalid",
+                      "developerMessage": "The headers are invalid",
+                      "defaultUserMessage": "The headers are invalid",
+                      "errors": [
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.platform.tenant.id.cannot.be.null.or.empty",
+                          "errorDescription": "Platform Tenant Id cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.platform.tenant.id.length.is.invalid",
+                          "errorDescription": "Platform Tenant Id length is invalid",
+                          "errorParameters": [
+                            {
+                              "key": "Platform-TenantId",
+                              "value": "20"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "Invalid Request Body": {
+                    "description": "Invalid Request Body",
+                    "value": {
+                      "errorCategory": "Validation",
+                      "errorCode": "error.msg.schema.validation.errors",
+                      "errorDescription": "The request is invalid",
+                      "developerMessage": "The request is invalid",
+                      "defaultUserMessage": "The request is invalid",
+                      "errors": [
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.payer.cannot.be.null.or.empty",
+                          "errorDescription": "Payer cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.payee.cannot.be.null.or.empty",
+                          "errorDescription": "Payee cannot be null or empty"
+                        },
+                        {
+                          "errorCategory": "Validation",
+                          "errorCode": "error.msg.schema.amount.cannot.be.null.or.empty",
+                          "errorDescription": "Amount cannot be null or empty"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          }
+        },
+        "tags": [
+          "transfer-api-controller"
+        ]
+      }
+    },
+    "/channel/transfer/{transactionId}": {
+      "get": {
+        "operationId": "transferId",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionStatusResponseDTO"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "transfer-api-controller"
+        ]
+      }
+    },
+    "/channel/txnState/{X-CorrelationID}": {
+      "get": {
+        "operationId": "txnState",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Platform-TenantId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "X-CorrelationID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "requestType",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TxnStateResponseDTO"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "txn-state-api-controller"
+        ]
+      }
+    },
+    "/channel/workflow/resolve": {
+      "post": {
+        "operationId": "workflow",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "workflow-api-controller"
+        ]
+      }
+    },
+    "/channel/workflow/{workflowInstanceKey}/cancel": {
+      "post": {
+        "operationId": "workflowKey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workflowInstanceKey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "workflow-api-controller"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Amount": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "CollectionRequestDTO": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/Amount"
+          },
+          "customData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomData"
+            }
+          },
+          "payer": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Payer"
+            }
+          },
+          "transactionType": {
+            "$ref": "#/components/schemas/TransactionType"
+          }
+        }
+      },
+      "ComplexName": {
+        "required": [
+          "partyIdType",
+          "partyIdentifier"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "fspId": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "partyIdType": {
+            "type": "string",
+            "enum": [
+              "MSISDN",
+              "EMAIL",
+              "PERSONAL_ID",
+              "BUSINESS",
+              "DEVICE",
+              "ACCOUNT_ID",
+              "IBAN",
+              "ALIAS"
+            ]
+          },
+          "partyIdentifier": {
+            "type": "string"
+          },
+          "partySubIdOrType": {
+            "type": "string"
+          }
+        }
+      },
+      "CustomData": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "object"
+          }
+        }
+      },
+      "ErrorDTO": {
+        "type": "object",
+        "properties": {
+          "errorCategory": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "errorDateTime": {
+            "type": "string"
+          },
+          "errorDescription": {
+            "type": "string"
+          },
+          "errorParameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorParameter"
+            }
+          }
+        }
+      },
+      "ErrorParameter": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "Extension": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "ExtensionList": {
+        "type": "object",
+        "properties": {
+          "extension": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Extension"
+            }
+          }
+        }
+      },
+      "Fee": {
+        "type": "object",
+        "properties": {
+          "feeAmount": {
+            "type": "string"
+          },
+          "feeCurrency": {
+            "type": "string"
+          },
+          "feeType": {
+            "type": "string"
+          }
+        }
+      },
+      "GSMATransaction": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "convLockKey": {
+            "type": "string"
+          },
+          "creationDate": {
+            "type": "string"
+          },
+          "creditParty": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GsmaParty"
+            }
+          },
+          "currency": {
+            "type": "string"
+          },
+          "debitParty": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GsmaParty"
+            }
+          },
+          "descriptionText": {
+            "type": "string"
+          },
+          "fees": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Fee"
+            }
+          },
+          "geoCode": {
+            "type": "string"
+          },
+          "internationalTransferInformation": {
+            "$ref": "#/components/schemas/InternationalTransferInformation"
+          },
+          "metadata": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GsmaParty"
+            }
+          },
+          "modificationDate": {
+            "type": "string"
+          },
+          "oneTimeCode": {
+            "type": "string"
+          },
+          "originalTransactionReference": {
+            "type": "string"
+          },
+          "receiverKyc": {
+            "$ref": "#/components/schemas/Kyc"
+          },
+          "receivingLei": {
+            "type": "string"
+          },
+          "requestDate": {
+            "type": "string"
+          },
+          "requestingLei": {
+            "type": "string"
+          },
+          "requestingOrganisationTransactionReference": {
+            "type": "string"
+          },
+          "senderKyc": {
+            "$ref": "#/components/schemas/Kyc"
+          },
+          "servicingIdentity": {
+            "type": "string"
+          },
+          "subType": {
+            "type": "string"
+          },
+          "transactionReceipt": {
+            "type": "string"
+          },
+          "transactionReference": {
+            "type": "string"
+          },
+          "transactionStatus": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "GeoCode": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string"
+          }
+        }
+      },
+      "GsmaP2PResponseDto": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          }
+        }
+      },
+      "GsmaParty": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "GsmaTransfer": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "customData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomData"
+            }
+          },
+          "descriptionText": {
+            "type": "string"
+          },
+          "payee": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Party"
+            }
+          },
+          "payer": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Party"
+            }
+          },
+          "requestDate": {
+            "type": "string"
+          },
+          "requestingOrganisationTransactionReference": {
+            "type": "string"
+          },
+          "subType": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "IdDocument": {
+        "type": "object",
+        "properties": {
+          "expiryDate": {
+            "type": "string"
+          },
+          "idNumber": {
+            "type": "string"
+          },
+          "idType": {
+            "type": "string"
+          },
+          "issueDate": {
+            "type": "string"
+          },
+          "issuer": {
+            "type": "string"
+          },
+          "issuerCountry": {
+            "type": "string"
+          },
+          "issuerPlace": {
+            "type": "string"
+          },
+          "otherIdDescription": {
+            "type": "string"
+          }
+        }
+      },
+      "InternationalTransferInformation": {
+        "type": "object",
+        "properties": {
+          "currencyPair": {
+            "type": "string"
+          },
+          "currencyPairRate": {
+            "type": "string"
+          },
+          "deliveryMethod": {
+            "type": "string"
+          },
+          "originCountry": {
+            "type": "string"
+          },
+          "quotationReference": {
+            "type": "string"
+          },
+          "quoteId": {
+            "type": "string"
+          },
+          "receivingAmount": {
+            "type": "string"
+          },
+          "receivingCountry": {
+            "type": "string"
+          },
+          "receivingCurrency": {
+            "type": "string"
+          },
+          "recipientBlockingReason": {
+            "type": "string"
+          },
+          "relationshipSender": {
+            "type": "string"
+          },
+          "remittancePurpose": {
+            "type": "string"
+          },
+          "senderBlockingReason": {
+            "type": "string"
+          },
+          "senderCurrency": {
+            "type": "string"
+          }
+        }
+      },
+      "Kyc": {
+        "type": "object",
+        "properties": {
+          "birthCountry": {
+            "type": "string"
+          },
+          "contactPhone": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "emailAddress": {
+            "type": "string"
+          },
+          "employerName": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "idDocument": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdDocument"
+            }
+          },
+          "nationality": {
+            "type": "string"
+          },
+          "occupation": {
+            "type": "string"
+          },
+          "postalAddress": {
+            "$ref": "#/components/schemas/PostalAddress"
+          },
+          "subjectName": {
+            "$ref": "#/components/schemas/SubjectName"
+          }
+        }
+      },
+      "MoneyData": {
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "Party": {
+        "required": [
+          "partyIdInfo"
+        ],
+        "type": "object",
+        "properties": {
+          "merchantClassificationCode": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "partyIdInfo": {
+            "$ref": "#/components/schemas/PartyIdInfo"
+          },
+          "personalInfo": {
+            "$ref": "#/components/schemas/PersonalInfo"
+          }
+        }
+      },
+      "PartyIdInfo": {
+        "required": [
+          "partyIdType",
+          "partyIdentifier"
+        ],
+        "type": "object",
+        "properties": {
+          "fspId": {
+            "type": "string"
+          },
+          "partyIdType": {
+            "type": "string",
+            "enum": [
+              "MSISDN",
+              "EMAIL",
+              "PERSONAL_ID",
+              "BUSINESS",
+              "DEVICE",
+              "ACCOUNT_ID",
+              "IBAN",
+              "ALIAS"
+            ]
+          },
+          "partyIdentifier": {
+            "type": "string"
+          },
+          "partySubIdOrType": {
+            "type": "string"
+          }
+        }
+      },
+      "Payer": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "PersonalInfo": {
+        "type": "object",
+        "properties": {
+          "complexName": {
+            "$ref": "#/components/schemas/ComplexName"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          }
+        }
+      },
+      "PostalAddress": {
+        "type": "object",
+        "properties": {
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "addressLine3": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "string"
+          },
+          "stateProvince": {
+            "type": "string"
+          }
+        }
+      },
+      "Refund": {
+        "type": "object",
+        "properties": {
+          "originalTransactionId": {
+            "type": "string"
+          },
+          "refundReason": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterAliasRequestDTO": {
+        "required": [
+          "accountId",
+          "idType",
+          "idValue"
+        ],
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "idType": {
+            "type": "string",
+            "enum": [
+              "MSISDN",
+              "EMAIL",
+              "PERSONAL_ID",
+              "BUSINESS",
+              "DEVICE",
+              "ACCOUNT_ID",
+              "IBAN",
+              "ALIAS"
+            ]
+          },
+          "idValue": {
+            "type": "string"
+          }
+        }
+      },
+      "RequestStateDTO": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDTO"
+          },
+          "expiryTime": {
+            "type": "string"
+          },
+          "notificationMethod": {
+            "type": "string"
+          },
+          "objectReference": {
+            "type": "string"
+          },
+          "pendingReason": {
+            "type": "string"
+          },
+          "pollLimit": {
+            "type": "string"
+          },
+          "serverCorrelationId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "SubjectName": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "nativeName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "TransactionChannelRequestDTO": {
+        "required": [
+          "amount",
+          "payer"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/MoneyData"
+          },
+          "amountType": {
+            "type": "string",
+            "enum": [
+              "SEND",
+              "RECEIVE"
+            ]
+          },
+          "clientRefId": {
+            "type": "string"
+          },
+          "customData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomData"
+            }
+          },
+          "expiration": {
+            "type": "string"
+          },
+          "extensionList": {
+            "$ref": "#/components/schemas/ExtensionList"
+          },
+          "geoCode": {
+            "$ref": "#/components/schemas/GeoCode"
+          },
+          "note": {
+            "type": "string"
+          },
+          "payee": {
+            "$ref": "#/components/schemas/Party"
+          },
+          "payer": {
+            "$ref": "#/components/schemas/Party"
+          },
+          "transactionType": {
+            "$ref": "#/components/schemas/TransactionType"
+          }
+        }
+      },
+      "TransactionStatusResponseDTO": {
+        "type": "object",
+        "properties": {
+          "clientRefId": {
+            "type": "string"
+          },
+          "completedTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "writeOnly": true
+          },
+          "completedTimestampDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "transferId": {
+            "type": "string"
+          },
+          "transferState": {
+            "type": "string",
+            "enum": [
+              "RECEIVED",
+              "RESERVED",
+              "COMMITTED",
+              "ABORTED"
+            ]
+          }
+        }
+      },
+      "TransactionType": {
+        "type": "object",
+        "properties": {
+          "balanceOfPayments": {
+            "type": "string"
+          },
+          "initiator": {
+            "type": "string",
+            "enum": [
+              "PAYER",
+              "PAYEE"
+            ]
+          },
+          "initiatorType": {
+            "type": "string",
+            "enum": [
+              "CONSUMER",
+              "AGENT",
+              "BUSINESS",
+              "DEVICE"
+            ]
+          },
+          "refundInfo": {
+            "$ref": "#/components/schemas/Refund"
+          },
+          "scenario": {
+            "type": "string",
+            "enum": [
+              "DEPOSIT",
+              "WITHDRAWAL",
+              "TRANSFER",
+              "PAYMENT",
+              "REFUND",
+              "MPESA"
+            ]
+          },
+          "subScenario": {
+            "type": "string"
+          }
+        }
+      },
+      "TxnStateResponseDTO": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          },
+          "transferState": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidationRequestDTO": {
+        "type": "object",
+        "properties": {
+          "customData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomData"
+            }
+          },
+          "primaryIdentifier": {
+            "$ref": "#/components/schemas/CustomData"
+          },
+          "secondaryIdentifier": {
+            "$ref": "#/components/schemas/CustomData"
+          }
+        }
+      },
+      "ValidationResponseDTO": {
+        "type": "object",
+        "properties": {
+          "accountHoldingInstitutionId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "amsName": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "msisdn": {
+            "type": "string"
+          },
+          "reconciled": {
+            "type": "boolean"
+          },
+          "transactionId": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
