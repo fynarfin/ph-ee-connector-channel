@@ -34,7 +34,7 @@ public class TransactionApiController implements TransactionApi {
     @Override
     @ValidateHeaders(requiredHeaders = { HeaderConstants.PLATFORM_TENANT_ID,
             HeaderConstants.CLIENT_CORRELATION_ID }, validatorClass = HeaderValidator.class, validationFunction = "validateTransactionRequest")
-    public ResponseEntity<GsmaP2PResponseDto> transaction(String tenant, String correlationId, TransactionChannelRequestDTO requestBody)
+    public ResponseEntity<GsmaP2PResponseDto> transaction(String tenant, String correlationId, String callbackURL, TransactionChannelRequestDTO requestBody)
             throws JsonProcessingException {
 
         try {
