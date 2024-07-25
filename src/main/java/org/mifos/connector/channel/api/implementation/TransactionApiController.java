@@ -32,7 +32,7 @@ public class TransactionApiController implements TransactionApi {
     private ProducerTemplate producerTemplate;
 
     @Override
-    @ValidateHeaders(requiredHeaders = { HeaderConstants.PLATFORM_TENANT_ID,
+    @ValidateHeaders(requiredHeaders = { HeaderConstants.PLATFORM_TENANT_ID, HeaderConstants.X_Callback_URL,
             HeaderConstants.CLIENT_CORRELATION_ID }, validatorClass = HeaderValidator.class, validationFunction = "validateTransactionRequest")
     public ResponseEntity<GsmaP2PResponseDto> transaction(String tenant, String correlationId, String callbackURL, TransactionChannelRequestDTO requestBody)
             throws JsonProcessingException {
