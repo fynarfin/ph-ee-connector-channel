@@ -54,6 +54,11 @@ public class HeaderValidator {
                 request.getHeader(HeaderConstants.PLATFORM_TENANT_ID), ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID, 20,
                 ChannelValidatorsEnum.INVALID_PLATFORM_TENANT_ID_LENGTH);
 
+        // Checks for X-CallbackURL
+        validatorBuilder.validateFieldIgnoreNullAndMaxLengthWithFailureCode(resource, HeaderConstants.X_Callback_URL,
+                request.getHeader(HeaderConstants.X_Callback_URL), 100,
+                ChannelValidatorsEnum.INVALID_X_CALLBACK_URL_LENGTH);
+
         return handleValidationErrors(validatorBuilder);
     }
 
